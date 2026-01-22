@@ -1,1 +1,14 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Quicksand:wght@300..700&display=swap');
+
+* {
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+  background-color: rgb(255, 255, 255);
+}
+
+.outfit {
+    font-family: 'outfit', sans-serif;
+}

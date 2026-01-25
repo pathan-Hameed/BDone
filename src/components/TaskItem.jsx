@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MdDelete, MdClose } from "react-icons/md";
 import { PiTextStrikethroughBold } from "react-icons/pi";
 
-function TaskItem({ task, onStrike, onDelete }) {
+function TaskItem({ task, onToggleComplete, onTaskDelete }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -11,9 +11,13 @@ function TaskItem({ task, onStrike, onDelete }) {
       <li className="bg-gradient-to-r from-gray-100 to-cyan-200 rounded-md px-4 py-2">
         <div className="flex justify-between items-center border-b pb-2">
           <p
-            className={`font-medium underline md:no-underline cursor-pointer hover:text-blue-700 ${
-              task.completed ? "line-through text-gray-500" : ""
-            }`}
+            className={`font-medium cursor-pointer hover:text-blue-700
+              ${
+                task.isCompleted
+                  ? "line-through text-gray-500"
+                  : "hover:underline md:no-underline"
+              }
+            `}
             onClick={() => setIsOpen(true)}
           >
             {task.title}
@@ -22,13 +26,13 @@ function TaskItem({ task, onStrike, onDelete }) {
           <div className="flex gap-3">
             <button
               type="button"
-              onClick={() => onStrike(task.id)}
-              className={`p-1 rounded ${task.completed ? "bg-red-300" : ""}`}
+              onClick={() => onToggleComplete(task.id)}
+              className={`p-1 rounded ${task.isCompleted ? "bg-red-300" : ""}`}
             >
               <PiTextStrikethroughBold />
             </button>
 
-            <button type="button" onClick={() => onDelete(task.id)}>
+            <button type="button" onClick={() => onTaskDelete(task.id)}>
               <MdDelete />
             </button>
           </div>
@@ -37,11 +41,11 @@ function TaskItem({ task, onStrike, onDelete }) {
         <div className="flex justify-between text-sm pt-2">
           <p
             className={`font-light truncate max-w-[66%] ${
-              task.completed ? "text-gray-400" : ""
+              task.isCompleted ? "text-gray-400" : ""
             }`}
             onClick={() => setIsOpen(true)}
           >
-            {task.desc}
+            {task.description}
           </p>
 
           <div className="flex items-center gap-2 text-xs">
@@ -70,7 +74,7 @@ function TaskItem({ task, onStrike, onDelete }) {
             </button>
 
             <h2 className="text-lg font-semibold">{task.title}</h2>
-            <p className="mt-2 text-sm">{task.desc}</p>
+            <p className="mt-2 text-sm">{task.description}</p>
 
             <div className="mt-4 text-xs text-gray-500 flex gap-4">
               <span>{task.date}</span>

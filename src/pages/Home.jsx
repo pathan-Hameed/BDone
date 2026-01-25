@@ -1,56 +1,34 @@
 import React, { useState } from "react";
-import { MdDelete } from "react-icons/md";
-import { PiTextStrikethroughBold } from "react-icons/pi";
 import TaskItem from "../components/TaskItem";
+import CreateTasks from "../components/CreateTasks";
 
 export default function Home() {
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
   const [tasks, setTasks] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!title.trim()) return;
-
-    setTasks((prev) => [
-      ...prev,
-      {
-        id: Date.now(), // unique ID (important)
-        title,
-        desc,
-        date,
-        time,
-        completed: false,
-      },
-    ]);
-
-    setTitle("");
-    setDesc("");
-    setDate("");
-    setTime("");
+  const handleOnTaskCreation = (newTask) => {
+    setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
-  const handleStrike = (id) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
-      ),
+  const handleComplete = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id
+          ? { ...task, isCompleted: !task.isCompleted }
+          : task
+      )
     );
   };
 
   const handleDelete = (id) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
-  const handleDeleteAll = () => {
+  const handleClearAllTasks = () => {
     setTasks([]);
   };
 
-  const completedCount = tasks.filter((t) => t.completed).length;
-  const total = tasks.length;
+  const completedTasks = tasks.filter((t) => t.isCompleted).length;
+  const totalTasks = tasks.length;
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -58,54 +36,17 @@ export default function Home() {
         <h1 className="font-bold text-3xl text-cyan-900">Task Manager</h1>
 
         {/* FORM */}
-        <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="flex gap-4">
-            <input
-              className="border rounded-md px-2 py-2 w-full"
-              placeholder="Enter Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-              className="px-4 py-2 bg-cyan-900 text-white rounded-md"
-              type="submit"
-            >
-              ADD
-            </button>
-          </div>
-
-          <textarea
-            className="border rounded-md px-2 py-2 w-full"
-            placeholder="Enter Description"
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-          />
-
-          <div className="flex gap-4">
-            <input
-              type="date"
-              className="border rounded-md px-2 py-2 w-full"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-            <input
-              type="time"
-              className="border rounded-md px-2 py-2 w-full"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
-          </div>
-        </form>
+        <CreateTasks onCreatingTask={handleOnTaskCreation} />
 
         {/* TASK LIST */}
         <div className="p-4 w-full bg-amber-100 rounded-md">
           <div className="w-full flex items-start justify-between">
             <p className="text-sm mb-2">
-              {completedCount}/{total} completed
+              {completedTasks}/{totalTasks} completed
             </p>
             <button
               className="text-sm text-blue-700 underline hover:text-blue-400 active:text-black"
-              onClick={handleDeleteAll}
+              onClick={handleClearAllTasks}
             >
               Clear all
             </button>
@@ -116,8 +57,8 @@ export default function Home() {
               <TaskItem
                 key={task.id}
                 task={task}
-                onStrike={handleStrike}
-                onDelete={handleDelete}
+                onToggleComplete={handleComplete}
+                onTaskDelete={handleDelete}
               />
             ))}
           </ul>

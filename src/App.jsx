@@ -2,6 +2,7 @@ import React from "react";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import TaskHistory from "./pages/TaskHistory";
+import DialyTasks from "./pages/DialyTasks";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/history" element={<TaskHistory />} />
+        <Route path="/daily" element={<DialyTasks />} />
       </Routes>
     </div>
   );

@@ -2,60 +2,61 @@ import React, { useState } from "react";
 import TaskItem from "../components/TaskItem";
 import CreateTasks from "../components/CreateTasks";
 
-export default function Home() {
-  const [tasks, setTasks] = useState([]);
+function Home({ dailyTasks, setDailyTasks, homeTasks, setHomeTasks }) {
   const [editingTask, setEditingTask] = useState(null);
-
 
   const handleSubmit = (task) => {
     if (editingTask) {
-      setTasks((prev) =>
-        prev.map((t) => (t.id === task.id ? task : t))
-      );
+      setHomeTasks((prev) => prev.map((t) => (t.id === task.id ? task : t)));
       setEditingTask(null);
     } else {
-      setTasks((prev) => [...prev, { ...task, id: Date.now() }]);
+      setHomeTasks((prev) => [...prev, { ...task, id: Date.now() }]);
     }
   };
 
-   const handleOnEdit = (task) => {
+  const handleOnEdit = (task) => {
     setEditingTask(task);
-    setIsAdded(true);
   };
 
-  const handleComplete = (id) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id
-          ? { ...task, isCompleted: !task.isCompleted }
-          : task
-      )
-    );
-  };
+  const toggleDailyTask = (id) => {
+  setDailyTasks((prev) =>
+    prev.map((t) =>
+      t.id === id ? { ...t, isCompleted: !t.isCompleted } : t
+    )
+  );
+};
+
+const toggleHomeTask = (id) => {
+  setHomeTasks((prev) =>
+    prev.map((t) =>
+      t.id === id ? { ...t, isCompleted: !t.isCompleted } : t
+    )
+  );
+};
 
   const handleDelete = (id) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setHomeTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
   const handleClearAllTasks = () => {
-    setTasks([]);
+    setHomeTasks([]);
+    setDailyTasks([]);
   };
 
-  const completedTasks = tasks.filter((t) => t.isCompleted).length;
-  const totalTasks = tasks.length;
+  const completedTasks = homeTasks.filter((t) => t.isCompleted).length + dailyTasks.filter((t) => t.isCompleted).length;
+  const totalTasks = homeTasks.length + dailyTasks.length;
 
   return (
     <div className="w-full h-screen flex justify-center items-start md:items-center px-4 md:px-8 py-8 md:py-4">
-      
       <div className="flex flex-col items-center gap-10 w-full md:w-[50%]">
         <h1 className="font-bold text-3xl text-cyan-900">Task Manager</h1>
 
         {/* FORM */}
-         <CreateTasks
+        <CreateTasks
           mode={editingTask ? "edit" : "create"}
           initialValues={editingTask}
           onSubmit={handleSubmit}
-          />
+        />
 
         {/* TASK LIST */}
         <div className="p-4 w-full bg-amber-100 rounded-md">
@@ -72,11 +73,20 @@ export default function Home() {
           </div>
 
           <ul className="flex flex-col gap-4 max-h-[40vh] overflow-y-scroll no-scrollbar mt-4">
-            {[...tasks].reverse().map((task) => (
+            {[...dailyTasks].reverse().map((task) => (
               <TaskItem
-                key={task.id}
+                key={`daily-${task.id}`}
                 task={task}
-                onToggleComplete={handleComplete}
+                onToggleComplete={toggleDailyTask}
+                onTaskDelete={handleDelete}
+                onTaskEdit={handleOnEdit}
+              />
+            ))}
+            {[...homeTasks].reverse().map((task) => (
+              <TaskItem
+                key={`home-${task.id}`}
+                task={task}
+                onToggleComplete={toggleHomeTask}
                 onTaskDelete={handleDelete}
                 onTaskEdit={handleOnEdit}
               />
@@ -87,3 +97,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;

@@ -4,9 +4,23 @@ import CreateTasks from "../components/CreateTasks";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
+  const [editingTask, setEditingTask] = useState(null);
 
-  const handleOnTaskCreation = (newTask) => {
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+
+  const handleSubmit = (task) => {
+    if (editingTask) {
+      setTasks((prev) =>
+        prev.map((t) => (t.id === task.id ? task : t))
+      );
+      setEditingTask(null);
+    } else {
+      setTasks((prev) => [...prev, { ...task, id: Date.now() }]);
+    }
+  };
+
+   const handleOnEdit = (task) => {
+    setEditingTask(task);
+    setIsAdded(true);
   };
 
   const handleComplete = (id) => {
@@ -31,12 +45,17 @@ export default function Home() {
   const totalTasks = tasks.length;
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
+    <div className="w-full h-screen flex justify-center items-start md:items-center px-4 md:px-8 py-8 md:py-4">
+      
       <div className="flex flex-col items-center gap-10 w-full md:w-[50%]">
         <h1 className="font-bold text-3xl text-cyan-900">Task Manager</h1>
 
         {/* FORM */}
-        <CreateTasks onCreatingTask={handleOnTaskCreation} />
+         <CreateTasks
+          mode={editingTask ? "edit" : "create"}
+          initialValues={editingTask}
+          onSubmit={handleSubmit}
+          />
 
         {/* TASK LIST */}
         <div className="p-4 w-full bg-amber-100 rounded-md">
@@ -59,6 +78,7 @@ export default function Home() {
                 task={task}
                 onToggleComplete={handleComplete}
                 onTaskDelete={handleDelete}
+                onTaskEdit={handleOnEdit}
               />
             ))}
           </ul>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { MdDelete, MdClose } from "react-icons/md";
+import { MdDelete, MdClose, MdEdit } from "react-icons/md";
 import { PiTextStrikethroughBold } from "react-icons/pi";
 
-function TaskItem({ task, onToggleComplete, onTaskDelete }) {
+function TaskItem({ task, onToggleComplete, onTaskDelete, onTaskEdit }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -30,6 +30,13 @@ function TaskItem({ task, onToggleComplete, onTaskDelete }) {
               className={`p-1 rounded ${task.isCompleted ? "bg-red-300" : ""}`}
             >
               <PiTextStrikethroughBold />
+            </button>
+
+            {/* EDIT BUTTON  */}
+            <button onClick={() => onTaskEdit(task)}>
+              <MdEdit
+                className="cursor-pointer"
+              />
             </button>
 
             <button type="button" onClick={() => onTaskDelete(task.id)}>

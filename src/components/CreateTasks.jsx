@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function CreateTasks({ onCreatingTask }) {
+function CreateTasks({ mode, initialValues, onSubmit }) {
     
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -10,24 +10,32 @@ function CreateTasks({ onCreatingTask }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title.trim()) return;
-
-    const newTask = {
-      id: Date.now(),
+    const payload = {
+      ...initialValues,
       title,
       description,
       dueDate,
       dueTime,
-      isCompleted: false,
     };
 
-    onCreatingTask(newTask); // ✅ send task immediately
+    onSubmit(payload);
 
+    // reset
     setTitle("");
     setDescription("");
     setDueDate("");
     setDueTime("");
   };
+
+
+  useEffect(() => {
+    if (mode === "edit" && initialValues) {
+      setTitle(initialValues.title);
+      setDescription(initialValues.description);
+      setDueDate(initialValues.dueDate);
+      setDueTime(initialValues.dueTime);
+    }
+  }, [mode, initialValues]);
 
   return (
     <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>

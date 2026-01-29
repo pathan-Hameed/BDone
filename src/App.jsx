@@ -3,10 +3,13 @@ import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import TaskHistory from "./pages/TaskHistory";
 import DialyTasks from "./pages/DialyTasks";
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <div className="px-8 sm:px-[50px] md:px-[100px] lg:px-[100px] py-4">
+    <div >
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/history" element={<TaskHistory />} />

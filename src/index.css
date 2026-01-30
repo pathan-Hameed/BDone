@@ -13,6 +13,10 @@ body {
     font-family: 'outfit', sans-serif;
 }
 
+.quicksand {
+  font-family: 'Quicksand', sans-serif;
+}
+
 /* hide scrollbar but allow scrolling */
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari */

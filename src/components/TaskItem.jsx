@@ -8,7 +8,7 @@ function TaskItem({ task, onToggleComplete, onTaskDelete, onTaskEdit }) {
   return (
     <>
       {/* TASK ITEM */}
-      <li className="bg-gradient-to-r from-gray-100 to-cyan-200 rounded-md px-4 py-2">
+      <li className="bg-gradient-to-r from-gray-400 to-cyan-200 rounded-md px-4 py-2">
         <div className="flex justify-between items-center border-b pb-2">
           <p
             className={`font-medium cursor-pointer hover:text-blue-700

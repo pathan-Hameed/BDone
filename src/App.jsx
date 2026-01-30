@@ -5,6 +5,8 @@ import TaskHistory from "./pages/TaskHistory";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DailyTasks from "./pages/DailyTasks";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
   const [dailyTasks, setDailyTasks] = useState([]);
@@ -30,6 +32,9 @@ useEffect(() => {
   return (
     <div>
       <ToastContainer />
+      <div className="flex flex-col items-center sticky top-4">
+      <Navbar />
+      </div>
       <Routes>
         <Route
           path="/"
@@ -50,6 +55,7 @@ useEffect(() => {
         />
         <Route path="/history" element={<TaskHistory />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

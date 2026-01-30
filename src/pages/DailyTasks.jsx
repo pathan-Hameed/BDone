@@ -14,14 +14,12 @@ function DailyTasks({ dailyTasks, setDailyTasks }) {
   const handleComplete = (id) => {
     setDailyTasks((prev) =>
       prev.map((task) =>
-        task.id === id
-          ? { ...task, isCompleted: !task.isCompleted }
-          : task
-      )
+        task.id === id ? { ...task, isCompleted: !task.isCompleted } : task,
+      ),
     );
   };
 
-   const handleOnEdit = (task) => {
+  const handleOnEdit = (task) => {
     setEditingTask(task);
     setIsAdded(true);
   };
@@ -32,7 +30,6 @@ function DailyTasks({ dailyTasks, setDailyTasks }) {
 
   return (
     <div className="min-h-screen flex flex-col justify-start px-4 md:px-12">
-
       {/* Daily tasks which will be rendered automatically daily on the home page  */}
       <div className="mt-12">
         <div className="flex items-center justify-between w-full">
@@ -63,28 +60,36 @@ function DailyTasks({ dailyTasks, setDailyTasks }) {
         {/* Create New Task Here  */}
         {/* Toggled when clicked on ADD+  */}
         <div
-          className={`mt-8 md:mt-12 z-50 ${isAdded ? "display sticky top-12 left-4" : "hidden"}`}
+          className={`${isAdded ? "block" : "hidden"} mt-8 md:mt-12 relative`}
         >
           <CreateTasks
-          mode={editingTask ? "edit" : "create"}
-          initialValues={editingTask}
-          onSubmit={handleSubmit}
+            mode={editingTask ? "edit" : "create"}
+            initialValues={editingTask}
+            onSubmit={handleSubmit}
           />
-
         </div>
       </div>
 
       {/* All created tasks would appear here  */}
-      <ul className="mt-12 mb-20 flex flex-col gap-4 overflow-y-scroll no-scrollbar min-h-[60vh] max-h-[70vh]">
-        {[...dailyTasks].reverse().map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            onToggleComplete={handleComplete}
-            onTaskDelete={handleDelete}
-            onTaskEdit={handleOnEdit}
-          />
-        ))}
+      <ul className="mt-12 mb-20 p-4 flex flex-col gap-4 overflow-y-scroll no-scrollbar min-h-[60vh] h-[60%] bg-blue-50 rounded-lg max-h-[70vh]">
+        {dailyTasks.length === 0 ? (
+          <div className="flex justify-center mt-12 text-gray-400">
+            Click <span className="mx-1 font-semibold">ADD+</span> to create
+            your first task
+          </div>
+        ) : (
+          [...dailyTasks]
+            .reverse()
+            .map((task) => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                onToggleComplete={handleComplete}
+                onTaskDelete={handleDelete}
+                onTaskEdit={handleOnEdit}
+              />
+            ))
+        )}
       </ul>
     </div>
   );

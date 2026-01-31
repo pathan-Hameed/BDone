@@ -65,7 +65,7 @@ const toggleHomeTask = (id) => {
         />
 
         {/* TASK LIST */}
-        <div className="p-4 w-full bg-amber-100 rounded-md">
+        <div className="p-4 w-full bg-[#f9fbff] rounded-md shadow-[0_8px_24px_rgba(59,130,246,0.12)]">
           <div className="w-full flex items-start justify-between">
             <p className="text-sm mb-2">
               <span className="font-semibold">{completedTasks}/{totalTasks}</span> completed

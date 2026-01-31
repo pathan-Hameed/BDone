@@ -31,9 +31,9 @@ function DailyTasks({ dailyTasks, setDailyTasks }) {
   return (
     <div className="min-h-screen flex flex-col justify-start px-4 md:px-12">
       {/* Daily tasks which will be rendered automatically daily on the home page  */}
-      <div className="mt-12">
+      <div className="mt-16">
         <div className="flex items-center justify-between w-full">
-          <h2 className="font-semibold text-2xl md:text-3xl text-black flex flex-col">
+          <h2 className="font-semibold text-xl md:text-3xl text-black flex flex-col">
             Daily Tasks
             <span className="text-sm md:text-md text-gray-600">
               Total Tasks: {dailyTasks.length}
@@ -60,7 +60,7 @@ function DailyTasks({ dailyTasks, setDailyTasks }) {
         {/* Create New Task Here  */}
         {/* Toggled when clicked on ADD+  */}
         <div
-          className={`${isAdded ? "block" : "hidden"} mt-8 md:mt-12 relative`}
+          className={`${isAdded ? "block" : "hidden"} mt-8 md:mt-12`}
         >
           <CreateTasks
             mode={editingTask ? "edit" : "create"}
@@ -71,7 +71,7 @@ function DailyTasks({ dailyTasks, setDailyTasks }) {
       </div>
 
       {/* All created tasks would appear here  */}
-      <ul className="mt-12 mb-20 p-4 flex flex-col gap-4 overflow-y-scroll no-scrollbar min-h-[60vh] h-[60%] bg-blue-50 rounded-lg max-h-[70vh]">
+      <ul className="mt-12 mb-20 p-4 flex flex-col gap-4 overflow-y-scroll no-scrollbar min-h-[60vh] h-[60%] bg-[#f9fbff] rounded-lg max-h-[70vh] shadow-[0_8px_24px_rgba(59,130,246,0.12)]">
         {dailyTasks.length === 0 ? (
           <div className="flex justify-center mt-12 text-gray-400">
             Click <span className="mx-1 font-semibold">ADD+</span> to create

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 function CreateTasks({ mode, initialValues, onSubmit }) {
-    
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -27,7 +26,6 @@ function CreateTasks({ mode, initialValues, onSubmit }) {
     setDueTime("");
   };
 
-
   useEffect(() => {
     if (mode === "edit" && initialValues) {
       setTitle(initialValues.title);
@@ -38,7 +36,11 @@ function CreateTasks({ mode, initialValues, onSubmit }) {
   }, [mode, initialValues]);
 
   return (
-    <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
+    <form
+      className="w-full flex flex-col bg-[#f9fbff] gap-4 rounded-lg
+    p-4 md:p-8 shadow-[0_8px_24px_rgba(59,130,246,0.12)]"
+      onSubmit={handleSubmit}
+    >
       <div className="flex gap-4">
         <input
           className="border rounded-md px-2 py-2 w-full"

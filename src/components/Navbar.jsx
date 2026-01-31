@@ -8,19 +8,52 @@ function Navbar() {
   return (
     <>
       {/* DESKTOP NAV */}
-      <div className="hidden md:flex justify-around font-semibold text-lg rounded-lg shadow-sm bg-blue-100 py-4 w-[60vw] mx-auto mt-4">
-        <Link to="/" className="hover:text-gray-600 ">Home</Link>
-        <Link to="/daily" className="hover:text-gray-600 ">Daily Tasks</Link>
-        <Link to="/history" className="hover:text-gray-600 ">History</Link>
+      <div
+        className="
+  hidden md:flex justify-around 
+  font-semibold text-lg 
+  rounded-xl 
+  shadow-lg 
+  backdrop-blur-md 
+  bg-white/20 
+  border border-white/30
+  py-4 
+  w-[60vw] 
+  mx-auto 
+  mt-4
+  hover:shadow-xl transition-all duration-300
+"
+      >
+        <Link to="/" className="hover:text-gray-600 ">
+          Home
+        </Link>
+        <Link to="/daily" className="hover:text-gray-600 ">
+          Daily Tasks
+        </Link>
+        <Link to="/history" className="hover:text-gray-600 ">
+          History
+        </Link>
       </div>
 
       {/* MOBILE MENU ICON */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
-        <MdMenu
-          className="h-8 w-8 cursor-pointer"
-          onClick={() => setIsOpen(true)}
-        />
-      </div>
+<div className="md:hidden fixed top-4 left-4 z-50">
+  <button
+    onClick={() => setIsOpen(true)}
+    className="
+      flex items-center justify-center
+      h-8 w-8
+      rounded-md
+      bg-white/10
+      backdrop-blur-md
+      border border-white/20
+      shadow-lg
+      hover:bg-white/20
+      transition
+     "
+  >
+    <MdMenu className="w-auto h-6 text-black" />
+  </button>
+</div>
 
       {/* OVERLAY */}
       {isOpen && (
@@ -46,9 +79,15 @@ function Navbar() {
 
         {/* Links */}
         <nav className="flex flex-col gap-6 px-6 py-8 font-medium text-lg">
-          <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
-          <Link to="/daily" onClick={() => setIsOpen(false)}>Daily Tasks</Link>
-          <Link to="/history" onClick={() => setIsOpen(false)}>History</Link>
+          <Link to="/" onClick={() => setIsOpen(false)}>
+            Home
+          </Link>
+          <Link to="/daily" onClick={() => setIsOpen(false)}>
+            Daily Tasks
+          </Link>
+          <Link to="/history" onClick={() => setIsOpen(false)}>
+            History
+          </Link>
         </nav>
       </div>
     </>

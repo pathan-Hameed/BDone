@@ -30,7 +30,7 @@ useEffect(() => {
 
 
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
       <ToastContainer />
       <div className="flex flex-col items-center sticky top-4">
       <Navbar />

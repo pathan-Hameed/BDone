@@ -42,7 +42,7 @@ function CreateTasks({ mode = "add", initialValues = {}, onSubmit }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white border border-gray-200 rounded-md md:rounded-xl p-5 md:p-6 shadow-sm space-y-4"
+      className="bg-white rounded-md md:rounded-xl p-5 md:p-6 shadow-sm space-y-4"
     >
       {/* Title */}
       <input

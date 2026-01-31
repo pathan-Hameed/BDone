@@ -41,17 +41,19 @@ function Dashboard({ tasks, setTasks }) {
     setEditingTask(task);
   };
 
-  // FILTER: what dashboard should show
-  const dailyTasks = tasks.filter(
-    (task) => task.frequency === "daily"
-  );
+  // CLEAR ALL
+  const handleClearAll = () => {
+    setTasks([]);
+  }
 
   return (
     <div className="w-full flex justify-center px-4 py-12">
-      <div className="flex flex-col gap-10 w-full md:w-[50%]">
+      <div className="flex flex-col gap-10 w-full ">
         <h1 className="font-bold text-3xl text-cyan-900 text-center">
           Task Manager
         </h1>
+
+        <div className="flex flex-col md:flex-row md:items-start md:justify-center gap-8 w-full ">
 
         {/* FORM */}
         <CreateTasks
@@ -61,8 +63,12 @@ function Dashboard({ tasks, setTasks }) {
         />
 
         {/* TASK LIST */}
-        <div className="p-4 bg-[#f9fbff] rounded-md shadow">
-          <ul className="flex flex-col gap-4 max-h-[40vh] overflow-y-scroll no-scrollbar">
+        <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2">
+        <div className="mb-4 flex justify-between items-center">
+          <p>{tasks.filter((t) => t.completed).length}/{tasks.length}</p>
+          <button onClick={handleClearAll} className="bg-blue-100 hover:bg-blue-300 active:bg-blue-500 text-blue-700 rounded-full text-sm px-4 py-2">Clear all</button>
+        </div>
+          <ul className="flex flex-col gap-4  max-h-[60vh] overflow-y-scroll no-scrollbar">
             {tasks.length === 0 ? (
               <p className="text-center text-gray-400">
                 No daily tasks yet
@@ -79,6 +85,8 @@ function Dashboard({ tasks, setTasks }) {
               ))
             )}
           </ul>
+        </div>
+
         </div>
       </div>
     </div>

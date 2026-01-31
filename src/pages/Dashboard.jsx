@@ -65,10 +65,10 @@ function Dashboard({ tasks, setTasks }) {
         {/* TASK LIST */}
         <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2">
         <div className="mb-4 flex justify-between items-center">
-          <p>{tasks.filter((t) => t.completed).length}/{tasks.length}</p>
+          <p className="outfit text-sm">{tasks.filter((t) => t.completed).length}/{tasks.length} <span>Completed</span></p>
           <button onClick={handleClearAll} className="bg-blue-100 hover:bg-blue-300 active:bg-blue-500 text-blue-700 rounded-full text-sm px-4 py-2">Clear all</button>
         </div>
-          <ul className="flex flex-col gap-4  max-h-[60vh] overflow-y-scroll no-scrollbar">
+          <ul className="flex flex-col gap-4 h-full max-h-[60vh]  overflow-y-scroll no-scrollbar">
             {tasks.length === 0 ? (
               <p className="text-center text-gray-400">
                 No daily tasks yet

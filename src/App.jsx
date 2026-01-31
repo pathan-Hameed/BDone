@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import TaskHistory from "./pages/TaskHistory";
 import { ToastContainer } from "react-toastify";
@@ -7,53 +6,44 @@ import "react-toastify/dist/ReactToastify.css";
 import DailyTasks from "./pages/DailyTasks";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const [dailyTasks, setDailyTasks] = useState([]);
-  const [homeTasks, setHomeTasks] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    const savedDaily = JSON.parse(localStorage.getItem("dailyTasks"));
-    const savedHome = JSON.parse(localStorage.getItem("homeTasks"));
+    const savedHome = JSON.parse(localStorage.getItem("tasks"));
 
-    if (savedDaily) setDailyTasks(savedDaily);
-    if (savedHome) setHomeTasks(savedHome);
+    if (savedHome) setTasks(savedHome);
   }, []);
 
-useEffect(() => {
-  localStorage.setItem("dailyTasks", JSON.stringify(dailyTasks));
-}, [dailyTasks]);
-
-useEffect(() => {
-  localStorage.setItem("homeTasks", JSON.stringify(homeTasks));
-}, [homeTasks]);
-
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
       <ToastContainer />
       <div className="flex flex-col items-center sticky top-4">
-      <Navbar />
+        <Navbar />
       </div>
       <Routes>
         <Route
           path="/"
           element={
-            <Home
-              dailyTasks={dailyTasks}
-              setDailyTasks={setDailyTasks}
-              homeTasks={homeTasks}
-              setHomeTasks={setHomeTasks}
+            <Dashboard
+              tasks={tasks}
+              setTasks={setTasks}
             />
           }
         />
         <Route
           path="/daily"
           element={
-            <DailyTasks dailyTasks={dailyTasks} setDailyTasks={setDailyTasks} />
+            <DailyTasks />
           }
         />
-        <Route path="/history" element={<TaskHistory />} />
+        <Route path="/history" element={<TaskHistory  tasks={tasks} />} />
       </Routes>
       <Footer />
     </div>

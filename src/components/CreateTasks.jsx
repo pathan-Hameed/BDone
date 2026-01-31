@@ -11,12 +11,13 @@ function CreateTasks({ mode = "add", initialValues = {}, onSubmit }) {
     if (!title.trim()) return;
 
     const payload = {
-      id: initialValues.id ?? Date.now(),
+      id: initialValues.id ?? crypto.randomUUID(),
       title,
       description,
       dueDate,
       priority,
       completed: initialValues.completed ?? false,
+      createdAt: initialValues.createdAt ?? new Date().toISOString(),
     };
 
     onSubmit(payload);
@@ -41,7 +42,7 @@ function CreateTasks({ mode = "add", initialValues = {}, onSubmit }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white border border-gray-200 rounded-xl p-5 md:p-6 shadow-sm space-y-4"
+      className="bg-white border border-gray-200 rounded-md md:rounded-xl p-5 md:p-6 shadow-sm space-y-4"
     >
       {/* Title */}
       <input
@@ -62,7 +63,6 @@ function CreateTasks({ mode = "add", initialValues = {}, onSubmit }) {
 
       {/* Meta Row */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        
         {/* Due Date */}
         <input
           type="date"

@@ -25,7 +25,7 @@ function Navbar() {
 "
       >
         <Link to="/" className="hover:text-gray-600 ">
-          Home
+          Dashboard
         </Link>
         <Link to="/daily" className="hover:text-gray-600 ">
           Daily Tasks

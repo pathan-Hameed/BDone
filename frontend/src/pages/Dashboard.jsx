@@ -7,10 +7,23 @@ function Dashboard({ tasks, setTasks }) {
 
   // ADD / UPDATE
   const handleSubmitTask = (task) => {
+    fetch("http://localhost:5000/api/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Task created:", data);
+      })
+      .catch((error) => {
+        console.error("Error creating task:", error);
+      });
+      
     if (editingTask) {
-      setTasks((prev) =>
-        prev.map((t) => (t.id === task.id ? task : t))
-      );
+      setTasks((prev) => prev.map((t) => (t.id === task.id ? task : t)));
       setEditingTask(null);
     } else {
       setTasks((prev) => [
@@ -24,10 +37,8 @@ function Dashboard({ tasks, setTasks }) {
   const toggleComplete = (id) => {
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === id
-          ? { ...task, completed: !task.completed }
-          : task
-      )
+        task.id === id ? { ...task, completed: !task.completed } : task,
+      ),
     );
   };
 
@@ -44,7 +55,7 @@ function Dashboard({ tasks, setTasks }) {
   // CLEAR ALL
   const handleClearAll = () => {
     setTasks([]);
-  }
+  };
 
   return (
     <div className="w-full flex justify-center px-4 py-12">
@@ -54,39 +65,43 @@ function Dashboard({ tasks, setTasks }) {
         </h1>
 
         <div className="flex flex-col md:flex-row md:items-start md:justify-center gap-8 w-full ">
+          {/* FORM */}
+          <CreateTasks
+            mode={editingTask ? "edit" : "add"}
+            initialValues={editingTask || {}}
+            onSubmit={handleSubmitTask}
+          />
 
-        {/* FORM */}
-        <CreateTasks
-          mode={editingTask ? "edit" : "add"}
-          initialValues={editingTask || {}}
-          onSubmit={handleSubmitTask}
-        />
-
-        {/* TASK LIST */}
-        <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2">
-        <div className="mb-4 flex justify-between items-center">
-          <p className="outfit text-sm">{tasks.filter((t) => t.completed).length}/{tasks.length} <span>Completed</span></p>
-          <button onClick={handleClearAll} className="bg-blue-100 hover:bg-blue-300 active:bg-blue-500 text-blue-700 rounded-full text-sm px-4 py-2">Clear all</button>
-        </div>
-          <ul className="flex flex-col gap-4 h-full max-h-[60vh]  overflow-y-scroll no-scrollbar">
-            {tasks.length === 0 ? (
-              <p className="text-center text-gray-400">
-                No daily tasks yet
+          {/* TASK LIST */}
+          <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2">
+            <div className="mb-4 flex justify-between items-center">
+              <p className="outfit text-sm">
+                {tasks.filter((t) => t.completed).length}/{tasks.length}{" "}
+                <span>Completed</span>
               </p>
-            ) : (
-              [...tasks].map((task) => (
-                <TaskItem
-                  key={task.id}
-                  task={task}
-                  onToggleComplete={toggleComplete}
-                  onDelete={deleteTask}
-                  onEdit={handleOnEdit}
-                />
-              ))
-            )}
-          </ul>
-        </div>
-
+              <button
+                onClick={handleClearAll}
+                className="bg-blue-100 hover:bg-blue-300 active:bg-blue-500 text-blue-700 rounded-full text-sm px-4 py-2"
+              >
+                Clear all
+              </button>
+            </div>
+            <ul className="flex flex-col gap-4 h-full max-h-[60vh]  overflow-y-scroll no-scrollbar">
+              {tasks.length === 0 ? (
+                <p className="text-center text-gray-400">No daily tasks yet</p>
+              ) : (
+                [...tasks].map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    onToggleComplete={toggleComplete}
+                    onDelete={deleteTask}
+                    onEdit={handleOnEdit}
+                  />
+                ))
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

@@ -6,29 +6,24 @@ function CreateTasks({ mode = "add", initialValues = {}, onSubmit }) {
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState("Medium");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!title.trim()) return;
+ const handleSubmit = (e) => {
+  e.preventDefault();
+  if (!title.trim()) return;
 
-    const payload = {
-      id: initialValues.id ?? crypto.randomUUID(),
-      title,
-      description,
-      dueDate,
-      priority,
-      completed: initialValues.completed ?? false,
-      createdAt: initialValues.createdAt ?? new Date().toISOString(),
-    };
-
-    onSubmit(payload);
-
-    if (mode === "add") {
-      setTitle("");
-      setDescription("");
-      setDueDate("");
-      setPriority("Medium");
-    }
+  const payload = {
+    title,
+    description,
+    dueDate,
+    priority,
   };
+
+  onSubmit(payload);
+
+  setTitle("");
+  setDescription("");
+  setDueDate("");
+  setPriority("Medium");
+};
 
   useEffect(() => {
     if (mode === "edit" && initialValues) {

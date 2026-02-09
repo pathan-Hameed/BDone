@@ -1,6 +1,7 @@
 // task adding , deleting and updating logic is done here
 import Task from "../models/task.model.js";
 
+// ADD TASK
 export const addTask = async (req, res) => {
   try {
     const { title, description, dueDate, priority } = req.body;
@@ -12,6 +13,7 @@ export const addTask = async (req, res) => {
   }
 };
 
+// UPDATE TASK
 export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -32,7 +34,24 @@ export const updateTask = async (req, res) => {
   }
 };
 
+// TOGGLE COMPLETE UPDATE
+export const completedTasks = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isCompleted } = req.body;
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { isCompleted },
+      { new: true }
+    );
+    res.status(200).json({success: true, message: "Successfully task completion status updated",updatedTask});
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update task completion status", error });
+  }
+};
+
 // get today's tasks from the database and send it to the frontend
+// GET TODAY'S TASKS
 export const getTodayTasks = async (req, res) => {
   try {
     const startOfDay = new Date();
@@ -55,6 +74,7 @@ export const getTodayTasks = async (req, res) => {
 };
 
 // get all the tasks from the database and send it to the frontend
+// GET ALL TASKS
 export const getTasks = async (req, res) => {
   try {
     const tasks = await Task.find();

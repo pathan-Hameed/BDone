@@ -17,6 +17,10 @@ const taskSchema = new mongoose.Schema({
         enum: ['Low', 'Medium', 'High'],
         default: 'Medium'
     },
+    isCompleted: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 
 const Task = mongoose.model('Task', taskSchema);

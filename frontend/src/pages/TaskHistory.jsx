@@ -29,8 +29,16 @@ function TaskHistory() {
       .catch(() => setLoading(false));  
   }, []);
 
+  useEffect(() => {
+  if (tasks.length) {
+    console.log(tasks[0]);
+  }
+}, [tasks]);
+
   /* GROUP TASKS BY DATE */
   const groupedTasks = tasks.reduce((acc, task) => {
+    if (!task.createdAt) return acc; 
+
     const date = new Date(task.createdAt).toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",
@@ -85,16 +93,16 @@ function TaskHistory() {
             <div className="flex flex-col gap-3">
               {groupedTasks[date].map((task) => (
                 <div
-                  key={task.id}
+                  key={task._id}
                   className={`p-4 rounded-xl border bg-white shadow-sm flex justify-between items-start transition hover:shadow-md ${
-                    task.completed
+                    task.isCompleted
                       ? "border-green-200 bg-green-50/50"
                       : "border-gray-200"
                   }`}
                 >
                   {/* LEFT */}
                   <div className="flex gap-3">
-                    {task.completed ? (
+                    {task.isCompleted ? (
                       <CheckCircle size={18} className="text-green-600 mt-1" />
                     ) : (
                       <Circle size={18} className="text-gray-400 mt-1" />
@@ -103,7 +111,7 @@ function TaskHistory() {
                     <div>
                       <h3
                         className={`font-medium ${
-                          task.completed
+                          task.isCompleted
                             ? "line-through text-gray-500"
                             : "text-gray-800"
                         }`}

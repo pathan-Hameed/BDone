@@ -5,16 +5,31 @@ import CreateTasks from "../components/CreateTasks";
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
+  const [view, setView] = useState("today"); // "today" or "all"
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/tasks/today")
-      .then((res) => res.json())
-      .then((data) => {
-        setTasks(data || []);
-      })
-      .catch(console.error);
-  }, []);
+    const fetchTasks = async () => {
+      try {
+        const url =
+          view === "today"
+            ? "http://localhost:5000/api/tasks/today"
+            : "http://localhost:5000/api/tasks";
 
+        const res = await fetch(url);
+        const data = await res.json();
+        setTasks(data.data || data || []);
+      } catch (err) {
+        console.error("Failed to fetch tasks", err);
+      }
+    };
+
+    fetchTasks();
+  }, [view]); // 👈 dependency
+
+  const handleShowTodayTasks = () => setView("today");
+  const handleShowAllTasks = () => setView("all");
+
+  // HANDLE CREATE & UPDATE
   const handleSubmitTask = async (task) => {
     try {
       if (editingTask) {
@@ -52,13 +67,29 @@ function Dashboard() {
     }
   };
 
-  // TOGGLE COMPLETE
-  const toggleComplete = (id) => {
+  // TOGGLE COMPLETION STATUS
+  const handleComplete = async (id) => {
+    const previousTasks = [...tasks];
+
+    // optimistic update
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
+        task._id === id ? { ...task, isCompleted: !task.isCompleted } : task,
       ),
     );
+
+    try {
+      await fetch(`http://localhost:5000/api/tasks/${id}/toggle`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          isCompleted: !tasks.find((t) => t._id === id).isCompleted,
+        }),
+      });
+    } catch (error) {
+      console.error(error);
+      setTasks(previousTasks); // rollback
+    }
   };
 
   // DELETE
@@ -76,6 +107,7 @@ function Dashboard() {
     setTasks([]);
   };
 
+  const completedCount = tasks.filter((task) => task.isCompleted).length;
   return (
     <div className="w-full flex justify-center px-4 py-12">
       <div className="flex flex-col gap-10 w-full ">
@@ -93,11 +125,34 @@ function Dashboard() {
 
           {/* TASK LIST */}
           <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2">
+            <p className="mb-4 outfit text-sm">
+              {completedCount}/{tasks.length} <span>Completed</span>
+            </p>
             <div className="mb-4 flex justify-between items-center">
-              {/* <p className="outfit text-sm">
-                {tasks.filter((t) => t.completed).length}/{tasks.length}{" "}
-                <span>Completed</span>
-              </p> */}
+              <div className="flex gap-2 md:gap-4 items-center justify-between">
+                <button
+                  onClick={handleShowTodayTasks}
+                  className={`flex-1 px-4 py-2 text-sm md:text-base font-medium rounded-full transition
+        ${
+          view === "today"
+            ? "bg-blue-500 text-white shadow"
+            : "text-blue-700 hover:bg-blue-100"
+        }`}
+                >
+                  Today's 
+                </button>
+                <button
+                  onClick={handleShowAllTasks}
+                  className={`flex-1 px-4 py-2 text-sm md:text-base font-medium rounded-full transition
+        ${
+          view === "all"
+            ? "bg-blue-500 text-white shadow"
+            : "text-blue-700 hover:bg-blue-100"
+        }`}
+                >
+                  All 
+                </button>
+              </div>
               <button
                 onClick={handleClearAll}
                 className="bg-blue-100 hover:bg-blue-300 active:bg-blue-500 text-blue-700 rounded-full text-sm px-4 py-2"
@@ -105,12 +160,17 @@ function Dashboard() {
                 Clear all
               </button>
             </div>
-            <ul className="flex flex-col gap-4 h-full max-h-[60vh]  overflow-y-scroll no-scrollbar">
+            <ul className="flex flex-col gap-4 h-full min-h-[40vh] max-h-[60vh]  overflow-y-scroll no-scrollbar">
               {tasks.length === 0 ? (
                 <p className="text-center text-gray-400">No daily tasks yet</p>
               ) : (
                 [...tasks].map((task) => (
-                  <TaskItem key={task._id} task={task} onEdit={handleOnEdit} />
+                  <TaskItem
+                    key={task._id}
+                    task={task}
+                    onEdit={handleOnEdit}
+                    onToggleComplete={handleComplete}
+                  />
                 ))
               )}
             </ul>

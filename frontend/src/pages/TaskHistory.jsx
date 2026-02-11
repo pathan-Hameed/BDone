@@ -29,12 +29,6 @@ function TaskHistory() {
       .catch(() => setLoading(false));  
   }, []);
 
-  useEffect(() => {
-  if (tasks.length) {
-    console.log(tasks[0]);
-  }
-}, [tasks]);
-
   /* GROUP TASKS BY DATE */
   const groupedTasks = tasks.reduce((acc, task) => {
     if (!task.createdAt) return acc; 
@@ -101,11 +95,11 @@ function TaskHistory() {
                   }`}
                 >
                   {/* LEFT */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 justify-between">
                     {task.isCompleted ? (
-                      <CheckCircle size={18} className="text-green-600 mt-1" />
+                      <CheckCircle size={18} className="text-green-600 mt-1 min-w-4" />
                     ) : (
-                      <Circle size={18} className="text-gray-400 mt-1" />
+                      <Circle size={18} className="text-gray-400 mt-1 min-w-2" />
                     )}
 
                     <div>

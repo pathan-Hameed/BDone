@@ -1,7 +1,7 @@
 // tasks routes are defined here
 import express from 'express';
 import { addTask, getTasks, getTodayTasks, updateTask, completedTasks } from '../controllers/task.controller.js';
-import { addDailyTasks, getDailyTasks } from '../controllers/daily.controller.js';
+import { addDailyTasks, getDailyTasks, toggleComplete } from '../controllers/daily.controller.js';
 
 const router = express.Router();
 
@@ -16,5 +16,6 @@ router.get('/tasks/today', getTodayTasks);
 // tasks created in daily page
 router.post('/daily', addDailyTasks);
 router.get('/daily', getDailyTasks);
+router.patch('/daily/:id/toggle', toggleComplete);
 
 export default router;

@@ -146,71 +146,7 @@ function Dashboard() {
   const completedCount = tasks.filter((task) => task.isCompleted).length;
   return (
     <div className="w-full flex justify-center px-4 py-12">
-      <div className="flex flex-col gap-10 w-full ">
-        <h1 className="font-bold text-3xl text-cyan-900 text-center">
-          Task Manager
-        </h1>
-
-        <div className="flex flex-col md:flex-row md:items-start md:justify-center gap-8 w-full ">
-          {/* FORM */}
-          <CreateTasks
-            mode={editingTask ? "edit" : "add"}
-            initialValues={editingTask || {}}
-            onSubmit={handleSubmitTask}
-          />
-
-          {/* TASK LIST */}
-          <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2">
-            <p className="mb-4 outfit text-sm">
-              {completedCount}/{tasks.length} <span>Completed</span>
-            </p>
-            <div className="mb-4 flex justify-between items-center">
-              <div className="flex gap-2 md:gap-4 items-center">
-                {["today", "all", "daily"].map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => handleViewChange(type)}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200
-                      ${
-                        view === type
-                          ? "bg-cyan-700 text-white shadow-md scale-105"
-                          : "bg-blue-100 text-blue-700 hover:bg-blue-300"
-                      }`}
-                  >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={handleClearAll}
-                className="bg-blue-100 hover:bg-blue-300 active:bg-blue-500 text-blue-700 rounded-full text-sm px-4 py-2"
-              >
-                Clear all
-              </button>
-            </div>
-            <ul className="flex flex-col gap-4 h-full min-h-[40vh] max-h-[60vh]  overflow-y-scroll no-scrollbar">
-              {tasks.length === 0 ? (
-                <p className="text-gray-500 text-center">
-                  {" "}
-                  No task here yet..{" "}
-                </p>
-              ) : (
-                [...tasks]
-                  .reverse()
-                  .map((task) => (
-                    <TaskItem
-                      key={task._id}
-                      task={task}
-                      onEdit={handleOnEdit}
-                      onToggleComplete={handleComplete}
-                      onDelete={handleDelete}
-                    />
-                  ))
-              )}
-            </ul>
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 }

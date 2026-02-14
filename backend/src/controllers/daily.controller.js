@@ -21,6 +21,27 @@ export const addDailyTasks = async (req, res) => {
   }
 };
 
+// UPDATE TASK
+export const updateDailyTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedTask = await Daily.findByIdAndUpdate(
+      id,
+      req.body,            // fields to update
+      { new: true }        // return updated document
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.status(200).json({data:updatedTask});
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update task", error });
+  }
+};
+
 //DAILY TASKS COMPLETE TOGGLE
 export const toggleComplete = async (req, res) => {
   try {
@@ -41,7 +62,7 @@ export const toggleComplete = async (req, res) => {
 export const getDailyTasks = async (req, res) => {
   try {
     const tasks = await Daily.find({});
-    res.status(200).json({success: true, message: "got all daily tasks from db", tasks: tasks})
+    res.status(200).json({success: true, message: "got all daily tasks from db", data: tasks})
     
   } catch (error) {
     res.status(200).json({success: false, message: "failed to retrieve tasks", error})

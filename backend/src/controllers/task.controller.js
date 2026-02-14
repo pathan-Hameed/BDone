@@ -50,6 +50,33 @@ export const completedTasks = async (req, res) => {
   }
 };
 
+// DELETE TASK
+export const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedTask = await Task.findByIdAndDelete(id);
+
+    if (!deletedTask) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Task deleted successfully",
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete task",
+    });
+  }
+};
+
 // get today's tasks from the database and send it to the frontend
 // GET TODAY'S TASKS
 export const getTodayTasks = async (req, res) => {

@@ -1,96 +1,68 @@
-import { SlCalender } from "react-icons/sl";
-import { FiEdit2 } from "react-icons/fi";
+import { FiCheck, FiEdit2, FiTrash2 } from "react-icons/fi";
 
-function TaskItem({ task, onToggleComplete, onDelete, onEdit }) {
+export default function TaskItem({ task }) {
+  const priorityStyles = {
+    Low: {
+      accent: "from-emerald-400/40 to-transparent",
+      glow: "hover:shadow-emerald-100",
+      dot: "bg-emerald-400",
+    },
+    Medium: {
+      accent: "from-amber-400/40 to-transparent",
+      glow: "hover:shadow-amber-100",
+      dot: "bg-amber-400",
+    },
+    High: {
+      accent: "from-red-500/50 to-transparent",
+      glow: "hover:shadow-rose-200",
+      dot: "bg-red-500",
+    },
+  };
+
+  const style = priorityStyles[task.priority] || priorityStyles.Low;
 
   return (
     <div
-      className={`border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition ${
-        task.isCompleted ? "bg-blue-50" : "bg-white"
-      }`}
+      className={`
+        relative
+        bg-white
+        p-6
+        rounded-2xl
+        shadow-sm
+        hover:shadow-xl
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        group
+        overflow-hidden
+      `}
     >
-      {/* Header */}
-      <div className="flex justify-between items-start gap-2">
-        <h3
-          className={`text-lg font-semibold max-w-[70%] truncate ${
-            task.isCompleted ? "line-through text-gray-400" : "text-gray-800"
-          }`}
-        >
-          {task.title}
-        </h3>
+      {/* Subtle Gradient Accent Top */}
+      <div
+        className={`absolute top-0 left-0 h-[3px] w-full bg-gradient-to-r ${style.accent}`}
+      />
 
-        <span
-          className={`text-xs font-semibold px-3 py-1 rounded-full ${priorityStyles(
-            task.priority,
-          )}`}
-        >
-          {task.priority}
-        </span>
+      {/* Hover Icons */}
+      <div className="absolute top-4 right-4 flex gap-3 opacity-0 group-hover:opacity-100 transition duration-300">
+        <FiCheck className="text-gray-400 hover:text-green-500 cursor-pointer transition" />
+        <FiEdit2 className="text-gray-400 hover:text-blue-500 cursor-pointer transition" />
+        <FiTrash2 className="text-gray-400 hover:text-red-500 cursor-pointer transition" />
+      </div>
+
+      {/* Title + Priority Dot */}
+      <div className="flex items-center gap-3 mt-3">
+        <span className={`w-2.5 h-2.5 rounded-full ${style.dot}`} />
+
+        <h3 className="text-lg font-semibold text-gray-800 relative inline-block truncate">
+          {task.title}
+          <span className="absolute left-0 -bottom-1 w-1/2 h-[2px] bg-gray-900/70 group-hover:w-full transition-all duration-300"></span>
+        </h3>
       </div>
 
       {/* Description */}
-      {task.description && (
-        <p
-          className={`text-sm mt-2 truncate max-w-[80%] ${
-            task.isCompleted ? "line-through text-gray-400" : "text-gray-600"
-          }`}
-        >
-          {task.description}
-        </p>
-      )}
-
-      {/* Footer */}
-      <div className="flex justify-between items-center mt-4">
-        <span className="flex items-center gap-2 text-xs text-gray-500 max-w-[30%] truncate">
-          {task.dueDate || "_/_"}
-        </span>
-
-        <div className="flex gap-2">
-          {/* Complete */}
-          <button
-            onClick={() => onToggleComplete(task._id, task.isCompleted)}
-            className={`px-3 py-1 text-xs rounded-md font-medium ${
-              task.isCompleted
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-green-100 text-green-700"
-            }`}
-          >
-            {task.isCompleted ? "Undo" : "Complete"}
-          </button>
-
-          {/* Edit */}
-          <button
-            onClick={() => onEdit(task)}
-            className="px-3 py-1 text-xs rounded-md font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition flex items-center gap-1"
-          >
-            <FiEdit2 size={12} />
-            Edit
-          </button>
-
-          {/* Delete */}
-          <button
-            onClick={() => onDelete(task._id)}
-            className="px-3 py-1 text-xs rounded-md font-medium bg-red-100 text-red-700 hover:bg-red-200 transition"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
+      <p className="mt-3 text-gray-500 text-sm leading-relaxed">
+        {task.description}
+      </p>
     </div>
   );
-}
-
-export default TaskItem;
-
-function priorityStyles(priority) {
-  switch (priority) {
-    case "High":
-      return "bg-red-100 text-red-700";
-    case "Medium":
-      return "bg-yellow-100 text-yellow-700";
-    case "Low":
-      return "bg-blue-100 text-blue-700";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
 }

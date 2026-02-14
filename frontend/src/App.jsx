@@ -10,9 +10,9 @@ import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
       <ToastContainer />
-      <div className="flex flex-col items-center sticky top-4">
+      <div className="flex flex-col items-center sticky top-4 z-50">
         <Navbar />
       </div>
       <Routes>

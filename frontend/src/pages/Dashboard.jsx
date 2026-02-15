@@ -6,6 +6,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { MdModeEditOutline } from "react-icons/md";
 import TaskItem from "../components/TaskItem";
+import { FiBarChart, FiLayers } from "react-icons/fi";
 
 function Dashboard() {
   const [category, setCategory] = useState("Daily");
@@ -30,7 +31,6 @@ function Dashboard() {
           },
         );
         const data = await res.json();
-        console.log(data[0].quote);
         setLoading(false);
         setQoute(data[0].quote);
       } catch (error) {
@@ -91,7 +91,7 @@ function Dashboard() {
                 gap-5 border border-gray-100"
         >
           {/* Top Row (Mobile) */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-8">
             <div className="flex items-center justify-center w-9 h-9 bg-blue-50 text-blue-500 rounded-xl">
               <IoFilterSharp size={18} />
             </div>
@@ -101,7 +101,7 @@ function Dashboard() {
           </div>
 
           {/* Category */}
-          <div className="flex flex-col md:flex-row md:items-center md:gap-3 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row md:items-center md:gap-2 w-full md:w-auto">
             <label className="text-xs text-gray-500 mb-1 md:mb-0">
               Category
             </label>
@@ -119,7 +119,7 @@ function Dashboard() {
           </div>
 
           {/* Status */}
-          <div className="flex flex-col md:flex-row md:items-center md:gap-3 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row md:items-center md:gap-2 w-full md:w-auto">
             <label className="text-xs text-gray-500 mb-1 md:mb-0">Status</label>
             <select
               value={status}
@@ -134,7 +134,7 @@ function Dashboard() {
           </div>
 
           {/* Priority */}
-          <div className="flex flex-col md:flex-row md:items-center md:gap-3 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row md:items-center md:gap-2 w-full md:w-auto">
             <label className="text-xs text-gray-500 mb-1 md:mb-0">Priority</label>
             <select
               value={priority}
@@ -321,8 +321,110 @@ function Dashboard() {
           ))
         )}
       </div>
-      {/* total tasks card  */}
-      {/* completed tasks  */}
+
+      {/*total tasks , completed tasks  */}
+      <div className="flex flex-col md:flex-row items-center justify-around gap-4 mx-8 md:mx-24 mb-12">
+        {/* total task cards  */}
+        <div
+          className="
+            relative
+            w-full 
+            p-6
+            rounded-2xl
+            bg-white
+            shadow-sm
+            hover:shadow-xl
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            overflow-hidden
+            group
+          "
+        >
+          {/* Subtle Background Accent */}
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-100 rounded-full blur-2xl opacity-50 group-hover:scale-110 transition duration-500"></div>
+
+          {/* Content */}
+          <div className="relative flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500 tracking-wide uppercase">
+                Total Tasks
+              </p>
+
+              <h2 className="text-4xl font-bold text-gray-800 mt-2">
+                {tasks.length}
+              </h2>
+
+              <p className="text-sm text-gray-400 mt-1">
+                Tasks created so far
+              </p>
+            </div>
+
+            {/* Icon */}
+            <div className="
+              p-4 
+              rounded-xl 
+              bg-indigo-50 
+              text-indigo-600 
+              text-2xl
+            ">
+              <FiLayers  />
+            </div>
+          </div>
+        </div>
+        {/* total no of completed tasks */}
+        <div
+          className="
+            relative
+            w-full
+            p-6
+            rounded-2xl
+            bg-white
+            shadow-sm
+            hover:shadow-xl
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            overflow-hidden
+            group
+          "
+        >
+          {/* Subtle Background Accent */}
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-100 rounded-full blur-2xl opacity-50 group-hover:scale-110 transition duration-500"></div>
+
+          {/* Content */}
+          <div className="relative flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500 tracking-wide uppercase">
+                Total Completed Tasks
+              </p>
+
+              <h2 className="text-4xl font-bold text-gray-800 mt-2">
+                {tasks.filter((t)=>{t.isComplete}).length}
+              </h2>
+
+              <p className="text-sm text-gray-400 mt-1">
+                Tasks completed so far
+              </p>
+            </div>
+
+            {/* Icon */}
+            <div className="
+              p-4 
+              rounded-xl 
+              bg-indigo-50 
+              text-indigo-600 
+              text-2xl
+            ">
+              <FiBarChart  />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* activity streak  */}
+
     </div>
   );
 }

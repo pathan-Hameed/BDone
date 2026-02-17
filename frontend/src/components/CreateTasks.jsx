@@ -5,6 +5,7 @@ function CreateTasks({ mode = "add", initialValues = {}, onSubmit }) {
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState("Medium");
+  const [category, setCategory] = useState("Today");
 
  const handleSubmit = (e) => {
   e.preventDefault();

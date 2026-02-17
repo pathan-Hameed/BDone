@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import CreateTasks from "../components/CreateTasks.jsx";
 import TaskItem from "../components/TaskItem.jsx";
+import TaskForm from "../components/TaskForm.jsx";
 
 export default function DailyTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+    const [open, setOpen] = useState(true);
 
   useEffect(() => {
     const fetchDailyTasks = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:5000/api/daily");
+        const res = await fetch("http://localhost:5000/api/tasks/daily");
         const data = await res.json();
-        setTasks(data.data || []);
+        setTasks(data.data || []);2
       } catch (err) {
         setError("Failed to load tasks");
         console.error(err);
@@ -24,63 +26,6 @@ export default function DailyTasks() {
 
     fetchDailyTasks();
   }, []);
-
-  // DAILY TASK ADDED
-  const handleSubmit = async (task) => {
-    try {
-      const res = await fetch("http://localhost:5000/api/daily", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(task),
-      });
-
-      const data = await res.json();
-
-      setTasks((prev) => [...prev, data.data]);
-    } catch (err) {
-      console.error("Failed to add task", err);
-    }
-  };
-
-  const handleEdit = (task) => {
-    
-  }
-
-  // TOGGLE COMPLETION STATUS
-  const handleComplete = async (id) => {
-    const task = tasks.find((t) => t._id === id);
-    const newStatus = !task.isCompleted;
-
-    const previousTasks = [...tasks];
-
-    setTasks((prev) =>
-      prev.map((t) => (t._id === id ? { ...t, isCompleted: newStatus } : t)),
-    );
-
-    try {
-      await fetch(`http://localhost:5000/api/daily/${id}/toggle`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isCompleted: newStatus }),
-      });
-    } catch (error) {
-      console.error("Failed to toggle", error);
-      setTasks(previousTasks);
-    }
-  };
-
-  // DELETE TASK
-  // const deleteTask = async (id) => {
-  //   try {
-  //     await fetch(`http://localhost:5000/api/daily/${id}`, {
-  //       method: "DELETE",
-  //     });
-
-  //     setTasks((prev) => prev.filter((task) => task._id !== id));
-  //   } catch (error) {
-  //     console.error("Delete failed", error);
-  //   }
-  // };
 
   return (
     <div className="min-h-screen p-6">
@@ -98,7 +43,8 @@ export default function DailyTasks() {
         <div className="flex flex-col md:flex-row md:justify-center md:items-start gap-4">
           {/* Add Task */}
           <div className="flex justify-center gap-3 mb-6 h-[50%]">
-            <CreateTasks onSubmit={handleSubmit} />
+            <TaskForm 
+            open={open}/>
           </div>
 
           {/* Task List */}

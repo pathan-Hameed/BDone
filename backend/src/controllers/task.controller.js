@@ -4,8 +4,8 @@ import Task from "../models/task.model.js";
 // ADD TASK
 export const addTask = async (req, res) => {
   try {
-    const { title, description, dueDate, priority } = req.body;
-    const newTask = new Task({ title, description, dueDate, priority });
+    const { title, description, category, dueDate, priority,  } = req.body;
+    const newTask = new Task({ title, description, category, priority, dueDate });
     await newTask.save();
     res.status(201).json(newTask);
   } catch (error) {
@@ -13,7 +13,7 @@ export const addTask = async (req, res) => {
   }
 };
 
-// UPDATE TASK
+// // UPDATE TASK
 export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -67,7 +67,7 @@ export const completedTasks = async (req, res) => {
   }
 };
 
-// DELETE TASK
+// DELETE INDIVIDUAL TASK 
 export const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -85,6 +85,7 @@ export const deleteTask = async (req, res) => {
       success: true,
       message: "Task deleted successfully",
     });
+
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -93,42 +94,76 @@ export const deleteTask = async (req, res) => {
   }
 };
 
-// get today's tasks from the database and send it to the frontend
-// GET TODAY'S TASKS
-export const getTodayTasks = async (req, res) => {
-  try {
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
-
-    const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999);
-
-    const tasks = await Task.find({
-      createdAt: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
-    });
-
-    res.status(200).json(tasks);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch today tasks", error });
-  }
-};
-
-// get all the tasks from the database and send it to the frontend
-// GET ALL TASKS
+// GET TASKS BY FILTERING
 export const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.status(201).json({
-      success: true,
-      message: "Tasks retrieved successfully",
-      data: tasks,
-    });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to retrieve tasks", error });
+    const { category, status, priority } = req.query;
+
+    const filter = {};
+
+    if (category && category !== "All") {
+      filter.category = category;
+    }
+
+    if (priority && priority !== "None") {
+      filter.priority = priority;
+    }
+
+    if (status) {
+      if (status === "Completed") {
+        filter.isCompleted = true;
+      } else if (status === "Not-Completed") {
+        filter.isCompleted = false;
+      }
+    }
+
+    const tasks = await Task.find(filter).sort({ createdAt: -1 });
+
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
+
+//DELETE ALL TASKS
+export const deleteAll = async (req, res) => {
+  try {
+    const result = await Task.deleteMany({});
+
+    res.status(200).json({
+      success: true,
+      message: "All tasks deleted successfully",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete tasks",
+      error: error.message,
+    });
+  }
+};
+
+
+// get today's tasks from the database and send it to the frontend
+// GET TODAY'S TASKS
+// export const getTodayTasks = async (req, res) => {
+//   try {
+//     const startOfDay = new Date();
+//     startOfDay.setHours(0, 0, 0, 0);
+
+//     const endOfDay = new Date();
+//     endOfDay.setHours(23, 59, 59, 999);
+
+//     const tasks = await Task.find({
+//       createdAt: {
+//         $gte: startOfDay,
+//         $lte: endOfDay,
+//       },
+//     });
+
+//     res.status(200).json(tasks);
+//   } catch (error) {
+//     res.status(500).json({ message: "Failed to fetch today tasks", error });
+//   }
+// };

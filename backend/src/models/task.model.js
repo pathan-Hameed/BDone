@@ -9,6 +9,12 @@ const taskSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    category: {
+        type: String,
+        enum: ['Today', 'Daily'],
+        default: 'Today',
+        required: true,
+    },
     dueDate: {
         type: Date,
     },

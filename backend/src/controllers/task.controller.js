@@ -20,8 +20,8 @@ export const updateTask = async (req, res) => {
 
     const updatedTask = await Task.findByIdAndUpdate(
       id,
-      req.body,            // fields to update
-      { new: true }        // return updated document
+      req.body, // fields to update
+      { new: true }, // return updated document
     );
 
     if (!updatedTask) {
@@ -38,15 +38,32 @@ export const updateTask = async (req, res) => {
 export const completedTasks = async (req, res) => {
   try {
     const { id } = req.params;
-    const { isCompleted } = req.body;
-    const updatedTask = await Task.findByIdAndUpdate(
-      id,
-      { isCompleted },
-      { new: true }
-    );
-    res.status(200).json({success: true, message: "Successfully task completion status updated",updatedTask});
+
+    const task = await Task.findById(id);
+
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    // Toggle logic handled by backend
+    task.isCompleted = !task.isCompleted;
+
+    await task.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Task completion status updated successfully",
+      updatedTask: task,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Failed to update task completion status", error });
+    res.status(500).json({
+      success: false,
+      message: "Failed to update task completion status",
+      error,
+    });
   }
 };
 
@@ -68,7 +85,6 @@ export const deleteTask = async (req, res) => {
       success: true,
       message: "Task deleted successfully",
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -111,6 +127,8 @@ export const getTasks = async (req, res) => {
       data: tasks,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to retrieve tasks", error });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to retrieve tasks", error });
   }
 };

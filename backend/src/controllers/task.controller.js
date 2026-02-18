@@ -149,6 +149,7 @@ export const deleteAll = async (req, res) => {
   }
 };
 
+// GET TASKS CATEGORY: DAILY
 export const dailyTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ category: "Daily"});

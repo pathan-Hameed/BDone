@@ -2,12 +2,22 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdOutlineCancel } from "react-icons/md";
 
-function TaskForm({ open, setOpen, editingTask, setEditingTask, refreshTasks }) {
+function TaskForm({
+  open,
+  setOpen,
+  editingTask,
+  setEditingTask,
+  refreshTasks,
+  mode = "normal",
+}) {
+
+  const isDailyMode = mode === "daily";
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: "Today",
-    priority: "Low",
+    priority: isDailyMode ? "High" : "Low",
     dueDate: "",
   });
 
@@ -26,7 +36,7 @@ function TaskForm({ open, setOpen, editingTask, setEditingTask, refreshTasks }) 
         title: "",
         description: "",
         category: "Today",
-        priority: "Low",
+        priority: isDailyMode ? "High" : "Low",
         dueDate: "",
       });
     }
@@ -81,9 +91,9 @@ function TaskForm({ open, setOpen, editingTask, setEditingTask, refreshTasks }) 
 
   //close form
   const handleClose = () => {
-  setEditingTask(null);
-  setOpen(false);
-};
+    setEditingTask(null);
+    setOpen(false);
+  };
 
   return (
     <AnimatePresence>
@@ -92,11 +102,13 @@ function TaskForm({ open, setOpen, editingTask, setEditingTask, refreshTasks }) 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="mt-10 mx-auto max-w-2xl bg-white shadow-xl rounded-3xl p-8"
+          className="mx-auto max-w-2xl bg-white shadow-xl rounded-3xl p-8"
         >
-          <div className="flex justify-end text-2xl text-gray-600">
-            <MdOutlineCancel onClick={handleClose} />
-          </div>
+          {!isDailyMode && (
+            <div className="flex justify-end text-2xl text-gray-600">
+              <MdOutlineCancel onClick={handleClose} />
+            </div>
+          )}
 
           <h3 className="text-2xl font-bold mb-6 text-center">
             {editingTask ? "Edit Task" : "Create New Task"}
@@ -121,45 +133,49 @@ function TaskForm({ open, setOpen, editingTask, setEditingTask, refreshTasks }) 
             {/* Date + Category + Priority Row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
               {/* Due Date */}
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Complete Before
-                </label>
-                <input
-                  type="date"
-                  name="dueDate"
-                  value={formData.dueDate}
-                  onChange={handleChange}
-                  className="w-full
+              {!isDailyMode && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Complete Before
+                  </label>
+                  <input
+                    type="date"
+                    name="dueDate"
+                    value={formData.dueDate}
+                    onChange={handleChange}
+                    className="w-full
                    px-4 py-3 
                    rounded-xl 
                    border border-gray-200 
                    bg-gray-50 
                    focus:outline-none focus:ring-2 focus:ring-blue-400 
                    transition"
-                />
-              </div>
+                  />
+                </div>
+              )}
               {/* Category */}
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Category
-                </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="w-full 
+              {!isDailyMode && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="w-full 
                   px-4 py-3 
                   rounded-xl 
                   border border-gray-200 
                   bg-gray-50 
                   focus:outline-none focus:ring-2 focus:ring-blue-400 
                   transition"
-                >
-                  <option value="Today">Today</option>
-                  <option value="Daily">Daily</option>
-                </select>
-              </div>
+                  >
+                    <option value="Today">Today</option>
+                    <option value="Daily">Daily</option>
+                  </select>
+                </div>
+              )}
               {/* Priority */}
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-2">

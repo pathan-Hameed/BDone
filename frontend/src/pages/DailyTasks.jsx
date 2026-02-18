@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import CreateTasks from "../components/CreateTasks.jsx";
 import TaskItem from "../components/TaskItem.jsx";
 import TaskForm from "../components/TaskForm.jsx";
 
@@ -29,8 +28,8 @@ export default function DailyTasks() {
 
   return (
     <div className="min-h-screen p-6">
-      <div className="my-8 md:my-12">
-        <div className="mb-6 md:mb-12">
+      <div className="mt-20">
+        <div className="mb-12 md:mb-12">
           {/* Header */}
           <h1 className="text-3xl text-center font-bold text-gray-800 mb-2">
             Daily Tasks
@@ -40,21 +39,22 @@ export default function DailyTasks() {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row md:justify-center md:items-start gap-4">
+        <div className="flex flex-col md:flex-row md:justify-center md:items-start gap-4 md:gap-8 md:px-24">
           {/* Add Task */}
-          <div className="flex justify-center gap-3 mb-6 h-[50%]">
+          <div className="mb-6 h-[50%]">
             <TaskForm 
-            open={open}/>
+            open={open}
+            mode="daily"/>
           </div>
 
           {/* Task List */}
-          <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2">
+          <div className="p-4 bg-[#f9fbff] rounded-md shadow w-full md:w-1/2 h-auto">
             <div className="relative sticky top-0 mb-8">
               <p className="absolute top-0 left-0">
                 <span>total Tasks:</span> {tasks.length}
               </p>
             </div>
-            <ul className="flex flex-col gap-4 h-full min-h-[40vh] max-h-[60vh]  overflow-y-scroll no-scrollbar">
+            <ul className="flex flex-col gap-4 w-full h-full min-h-[40vh] max-h-[60vh]  overflow-y-scroll no-scrollbar">
               {loading ? (
                 <p className="text-center">Loading...</p>
               ) : error ? (
@@ -65,11 +65,12 @@ export default function DailyTasks() {
                 </p>
               ) : (
                 tasks.map((task) => (
-                  <TaskItem
-                    key={task._id}
-                    task={task}
-                    onToggleComplete={handleComplete}
-                  />
+                  <div className="h-auto">
+                    <TaskItem
+                      key={task._id}
+                      task={task}
+                    />
+                  </div>
                 ))
               )}
             </ul>

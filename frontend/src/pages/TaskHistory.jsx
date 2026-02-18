@@ -18,15 +18,30 @@ const priorityStyles = (priority) => {
 function TaskHistory() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+    const [category, setCategory] = useState("All");
+    const [status, setStatus] = useState("None");
+    const [priority, setPriority] = useState("None");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/tasks")
-      .then((res) => res.json())
-      .then((data) => {
-        setTasks(data.data || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));  
+    const fetchTasks =  async () => {
+      try {
+        const query = new URLSearchParams({
+          category,
+          status,
+          priority,
+        }).toString();
+
+        const res = await fetch(`http://localhost:5000/api/tasks?${query}`);
+
+        const data = await res.json();
+        setLoading(false)
+        setTasks(data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+
+    fetchTasks();
   }, []);
 
   /* GROUP TASKS BY DATE */

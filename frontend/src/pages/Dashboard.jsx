@@ -10,8 +10,8 @@ import AllCards from "../components/AllCards";
 import TaskForm from "../components/TaskForm";
 
 function Dashboard() {
-  const [category, setCategory] = useState("All");
-  const [status, setStatus] = useState("Not Completed");
+  const [category, setCategory] = useState("Daily");
+  const [status, setStatus] = useState("None");
   const [priority, setPriority] = useState("None");
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);

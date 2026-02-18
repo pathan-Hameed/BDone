@@ -4,8 +4,14 @@ import Task from "../models/task.model.js";
 // ADD TASK
 export const addTask = async (req, res) => {
   try {
-    const { title, description, category, dueDate, priority,  } = req.body;
-    const newTask = new Task({ title, description, category, priority, dueDate });
+    const { title, description, category, dueDate, priority } = req.body;
+    const newTask = new Task({
+      title,
+      description,
+      category,
+      priority,
+      dueDate,
+    });
     await newTask.save();
     res.status(201).json(newTask);
   } catch (error) {
@@ -67,7 +73,7 @@ export const completedTasks = async (req, res) => {
   }
 };
 
-// DELETE INDIVIDUAL TASK 
+// DELETE INDIVIDUAL TASK
 export const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -85,7 +91,6 @@ export const deleteTask = async (req, res) => {
       success: true,
       message: "Task deleted successfully",
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -144,6 +149,26 @@ export const deleteAll = async (req, res) => {
   }
 };
 
+export const dailyTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find({ category: "Daily"});
+    // check if there are any tasks
+    if (!tasks) {
+      res.json({ message: "no such exists", success: false });
+    }
+
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "successfully retrieved the daily tasks",
+        data: tasks,
+      });
+
+  } catch (error) {
+    res.status(500).json({success: false, message: "failed to retrieve"});
+  }
+};
 
 // get today's tasks from the database and send it to the frontend
 // GET TODAY'S TASKS
